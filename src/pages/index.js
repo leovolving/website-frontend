@@ -1,20 +1,41 @@
-import React from "react"
-import { Link } from "gatsby"
+import React from "react"  
+import { StaticQuery, graphql } from "gatsby"
 
-import Layout from "../components/layout"
-import Image from "../components/image"
-import SEO from "../components/seo"
+import Layout from "../components/layout"  
+import ArticlesComponent from "../components/articles"
 
-const IndexPage = () => (
+import "../assets/css/main.css"
+
+const IndexPage = () => (  
   <Layout>
-    <SEO title="Home" />
-    <h1>Hi people</h1>
-    <p>Welcome to your new Gatsby site.</p>
-    <p>Now go build something great.</p>
-    <div style={{ maxWidth: `300px`, marginBottom: `1.45rem` }}>
-      <Image />
-    </div>
-    <Link to="/page-2/">Go to page 2</Link>
+    <StaticQuery
+      query={graphql`
+        query {
+          allStrapiBlog {
+            edges {
+              node {
+                strapiId
+                title
+                tags {
+                  name
+                }
+                banner {
+                  publicURL
+                }
+              }
+            }
+          }
+        }
+      `}
+      render={data => (
+        <div className="uk-section">
+          <div className="uk-container uk-container-large">
+            <h1>Strapi blog</h1>
+            <ArticlesComponent articles={data.allStrapiBlog.edges} />
+          </div>
+        </div>
+      )}
+    />
   </Layout>
 )
 
